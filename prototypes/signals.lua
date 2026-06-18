@@ -6,7 +6,7 @@ local function station_signal(name, order)
   return {
     type = "virtual-signal",
     name = name,
-    icon = "__custom-signals__/graphics/icons/" .. name .. ".png",
+    icon = "__custom-virtual-signals__/graphics/icons/" .. name .. ".png",
     icon_size = 64,
     subgroup = "custom-signals-stations",
     order = order,

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Build the mod-portal zip for Custom Signals.
 
-Produces custom-signals_<version>.zip in the repo root, containing a single
-top-level custom-signals/ folder with only the shipped files (no docs/, .git,
+Produces custom-virtual-signals_<version>.zip in the repo root, containing a
+single top-level custom-virtual-signals/ folder with only the shipped files (no docs/, .git,
 scripts/, tools/, or build artifacts). Version is read from info.json.
 
 Used both locally and by the GitHub Actions release workflow. Pure stdlib so
@@ -17,7 +17,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 with open(os.path.join(ROOT, "info.json")) as f:
     version = json.load(f)["version"]
 
-MOD_DIR = "custom-signals"
+MOD_DIR = "custom-virtual-signals"
 OUT = os.path.join(ROOT, f"{MOD_DIR}_{version}.zip")
 
 INCLUDE_FILES = ["info.json", "data.lua", "changelog.txt", "thumbnail.png",
