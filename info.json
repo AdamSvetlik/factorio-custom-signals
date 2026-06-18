@@ -1,0 +1,9 @@
+{
+  "name": "custom-signals",
+  "version": "1.0.0",
+  "title": "Custom Signals",
+  "author": "HarlyCZ",
+  "factorio_version": "2.0",
+  "description": "Adds a growing collection of extra virtual signals for the circuit network. v1 focuses on train logistics: distinct Requester, Provider, and Depot station signals so you can tag and manage your rail network at a glance. Missing a signal you need? Open an issue on GitHub and request it.",
+  "dependencies": ["base >= 2.0.0"]
+}

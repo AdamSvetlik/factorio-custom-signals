@@ -1,0 +1,53 @@
+name: Signal request
+description: Request a new signal to be added to Custom Signals
+title: "[Signal request]: "
+labels: ["signal request"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a signal! Fill in the details below so it can be
+        considered for a future version of the mod.
+  - type: input
+    id: signal-name
+    attributes:
+      label: Signal name
+      description: What should the signal be called (the display name shown on hover)?
+      placeholder: e.g. Stacker Station
+    validations:
+      required: true
+  - type: textarea
+    id: purpose
+    attributes:
+      label: What is it for?
+      description: Describe how you would use this signal in the circuit network.
+      placeholder: e.g. To tag train stops used as stackers / waiting bays.
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: Roughly what group does this signal belong to?
+      options:
+        - Train / rail
+        - Logistics
+        - Production
+        - Combat / military
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: icon-ideas
+    attributes:
+      label: Icon ideas (optional)
+      description: Any thoughts on what the icon should look like? Links or sketches welcome.
+    validations:
+      required: false
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I searched existing issues and this signal has not already been requested.
+          required: true

@@ -1,0 +1,6 @@
+# Local design/spec docs — not shipped with the mod
+docs/
+
+# Build artifacts
+*.zip
+/tools/

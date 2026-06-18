@@ -1,0 +1,77 @@
+name: Release
+
+# Push a tag like v1.0.0 to build the mod zip and publish a GitHub Release.
+# The tag (minus the leading "v") MUST match the version in info.json.
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Verify tag matches info.json version
+        run: |
+          tag="${GITHUB_REF_NAME#v}"
+          info="$(python3 -c "import json; print(json.load(open('info.json'))['version'])")"
+          echo "Tag version: $tag — info.json version: $info"
+          if [ "$tag" != "$info" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match info.json version $info"
+            exit 1
+          fi
+
+      - name: Build mod zip
+        id: build
+        run: echo "zip=$(python3 scripts/build_zip.py)" >> "$GITHUB_OUTPUT"
+
+      - name: Build release notes from changelog
+        run: |
+          python3 - "${GITHUB_REF_NAME#v}" <<'PY' > RELEASE_NOTES.md
+          import sys
+          ver = sys.argv[1]
+          out, capture = [], False
+          for ln in open("changelog.txt").read().splitlines():
+              if ln and set(ln) == {"-"}:        # separator line of dashes
+                  if capture:
+                      break
+                  continue
+              if ln.startswith("Version:"):
+                  capture = ln.split(":", 1)[1].strip() == ver
+              if capture:
+                  out.append(ln)
+          print("\n".join(out) if out else f"Custom Signals {ver}")
+          PY
+          cat RELEASE_NOTES.md
+
+      - name: Create GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            "${{ steps.build.outputs.zip }}" \
+            --title "Custom Signals $GITHUB_REF_NAME" \
+            --notes-file RELEASE_NOTES.md
+
+      # --- Optional: auto-publish to the Factorio mod portal -------------------
+      # To enable later:
+      #   1. Create the mod page once on mods.factorio.com (the API only uploads
+      #      releases to an existing mod; it cannot create the initial page).
+      #   2. Generate a portal API key with Upload/Publish/Edit Mods permissions
+      #      and add it as the repo secret FACTORIO_TOKEN.
+      #   3. Add a publish step using a maintained action such as
+      #      shanemadden/factorio-mod-portal-publish or TheBrutalX/Factorio-mod-uploader-action.
+      #      Check that action's README for its exact input names before wiring
+      #      it in (they differ between actions), then pass the built zip:
+      #      ${{ steps.build.outputs.zip }} and token: ${{ secrets.FACTORIO_TOKEN }}.

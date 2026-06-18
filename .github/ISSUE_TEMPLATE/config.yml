@@ -1,0 +1,3 @@
+# Keep blank issues enabled so bug reports / questions are still possible,
+# while nudging signal requests toward the structured form above.
+blank_issues_enabled: true

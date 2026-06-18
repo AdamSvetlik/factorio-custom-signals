@@ -1,0 +1,5 @@
+---------------------------------------------------------------------------------------------------
+Version: 1.0.0
+Date: 2026-06-18
+  Features:
+    - Initial release: adds Requester, Provider, Depot, and Refuel train-station signals.
